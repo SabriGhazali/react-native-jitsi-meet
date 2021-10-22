@@ -1,6 +1,6 @@
 import { NativeModules } from 'react-native'
 
-const { JitsiMeet } = NativeModules
+const { JitsiMeetModule } = NativeModules
 
 
-export default JitsiMeet
+export default JitsiMeetModule
