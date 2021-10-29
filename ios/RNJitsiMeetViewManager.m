@@ -45,6 +45,7 @@ RCT_EXPORT_METHOD(call:(NSString *)urlString userInfo:(NSDictionary *)userInfo)
         JitsiMeetConferenceOptions *options = [JitsiMeetConferenceOptions fromBuilder:^(JitsiMeetConferenceOptionsBuilder *builder) {        
             builder.room = urlString;
             builder.userInfo = _userInfo;
+            [builder setFeatureFlag:@"pip.enabled" withBoolean:NO];
         }];
         [jitsiMeetView join:options];
     });
