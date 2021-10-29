@@ -42,10 +42,13 @@ public class RNJitsiMeetModule extends ReactContextBaseJavaModule implements JSE
     private static final String CONST_JS_CONFERENCE_JOINED_EVENT_NAME = "CONFERENCE_JOINED_EVENT_NAME";
     private static final String CONST_JS_CONFERENCE_WILL_JOIN_EVENT_NAME = "CONFERENCE_WILL_JOIN_EVENT_NAME";
     private static final String CONST_JS_CONFERENCE_TERMINATED_EVENT_NAME = "CONFERENCE_TERMINATED_EVENT_NAME";
+    private static final String CONST_JS_PARTICIPANT_LEFT_EVENT_NAME = "PARTICIPANT_LEFT_EVENT_NAME";
+
 
     public static final String JS_CONFERENCE_TERMINATED_EVENT_NAME = "conference_terminated";
     public static final String JS_CONFERENCE_WILL_JOIN_EVENT_NAME = "conference_will_join";
     public static final String JS_CONFERENCE_JOINED_EVENT_NAME = "conference_joined";
+    public static final String JS_PARTICIPANT_LEFT_EVENT_NAME = "participant_left";
 
 
 
@@ -113,9 +116,14 @@ public class RNJitsiMeetModule extends ReactContextBaseJavaModule implements JSE
                 = new JitsiMeetConferenceOptions.Builder()
                 .setRoom(room)
                 .setUserInfo(_userInfo)
+                .setFeatureFlag("lobby-mode.enabled", true)
+                .setFeatureFlag("add-people.enabled", true)
+                .setFeatureFlag("invite.enabled", true)
+                .setFeatureFlag("replace.participant",true)
+                .setFeatureFlag("pip.enabled",false)
                 // Settings for audio and video
                 .setAudioMuted(true)
-                //.setVideoMuted(true)
+                .setVideoMuted(true)
                 .build();
         // Launch the new activity with the given options. The launch() method takes care
         // of creating the required Intent and passing the options.
@@ -146,6 +154,11 @@ public class RNJitsiMeetModule extends ReactContextBaseJavaModule implements JSE
                 case CONFERENCE_TERMINATED:
                     WritableMap eventDataTerminated = Arguments.createMap();
                     sendEventToJS(getReactApplicationContext(), JS_CONFERENCE_TERMINATED_EVENT_NAME, eventDataTerminated);
+                    break;
+                case PARTICIPANT_LEFT:
+                    WritableMap eventDataParticipantLeft = Arguments.createMap();
+                    eventDataParticipantLeft.putString("participantId", String.valueOf(event.getData().get("participantId")));
+                    sendEventToJS(getReactApplicationContext(), JS_PARTICIPANT_LEFT_EVENT_NAME, eventDataParticipantLeft);
                     break;
             }
         }
@@ -184,6 +197,7 @@ public class RNJitsiMeetModule extends ReactContextBaseJavaModule implements JSE
         constants.put(CONST_JS_CONFERENCE_JOINED_EVENT_NAME, JS_CONFERENCE_JOINED_EVENT_NAME);
         constants.put(CONST_JS_CONFERENCE_TERMINATED_EVENT_NAME, JS_CONFERENCE_TERMINATED_EVENT_NAME);
         constants.put(CONST_JS_CONFERENCE_WILL_JOIN_EVENT_NAME, JS_CONFERENCE_WILL_JOIN_EVENT_NAME);
+        constants.put(CONST_JS_PARTICIPANT_LEFT_EVENT_NAME, JS_PARTICIPANT_LEFT_EVENT_NAME);
         return constants;
     }
 
