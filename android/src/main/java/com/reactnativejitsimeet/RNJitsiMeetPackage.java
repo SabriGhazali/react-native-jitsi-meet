@@ -10,13 +10,26 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
-public class RNJitsiMeetPackage implements ReactPackage {
+public class RNJitsiMeetPackage implements ReactPackage, IRNJitsiMeetViewReference {
+
+    private RNJitsiMeetView mJitsiMeetView = null;
+
+
+    public void setJitsiMeetView(RNJitsiMeetView jitsiMeetView) {
+        mJitsiMeetView = jitsiMeetView;
+    }
+
+    public RNJitsiMeetView getJitsiMeetView() {
+        return mJitsiMeetView;
+    }
+
 
     @Override
     public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {
         List<NativeModule> modules = new ArrayList<>();
-        modules.add(new RNJitsiMeetModule(reactContext));
+        modules.add(new RNJitsiMeetModule(reactContext, this));
         return modules;
     }
 
@@ -26,6 +39,8 @@ public class RNJitsiMeetPackage implements ReactPackage {
 
     @Override
     public List<ViewManager> createViewManagers(ReactApplicationContext reactContext) {
-        return Arrays.<ViewManager>asList();
+        return Arrays.<ViewManager>asList(
+                new RNJitsiMeetViewManager(reactContext, this)
+        );
     }
 }
