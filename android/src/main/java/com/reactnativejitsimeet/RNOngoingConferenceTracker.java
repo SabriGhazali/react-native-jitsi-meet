@@ -1,5 +1,7 @@
 package com.reactnativejitsimeet;
 
+import android.util.Log;
+
 import com.facebook.react.bridge.ReadableMap;
 
 import java.util.Collection;
@@ -51,6 +53,8 @@ class RNOngoingConferenceTracker {
         if (url == null) {
             return;
         }
+
+        Log.d("RNOngoingConferenceTracker", "onExternalAPIEvent: "+name);
 
         switch(name) {
             case CONFERENCE_WILL_JOIN:

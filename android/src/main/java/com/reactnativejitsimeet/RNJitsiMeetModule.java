@@ -1,6 +1,7 @@
 package com.reactnativejitsimeet;
 
 
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.util.Log;
 
@@ -10,6 +11,7 @@ import java.net.URL;
 import java.net.MalformedURLException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
@@ -19,6 +21,7 @@ import com.facebook.react.module.annotations.ReactModule;
 import com.facebook.react.bridge.ReadableMap;
 
 import org.jitsi.meet.sdk.BroadcastEvent;
+import org.jitsi.meet.sdk.BroadcastIntentHelper;
 
 import javax.annotation.Nullable;
 
@@ -71,6 +74,11 @@ public class RNJitsiMeetModule extends ReactContextBaseJavaModule {
                             //.setWelcomePageEnabled(true)
                             .setFeatureFlag("pip.enabled",false)
                             .setFeatureFlag("invite.enabled",false)
+                            .setFeatureFlag("meeting-name.enabled",false)
+                            .setFeatureFlag("conference-timer.enabled",false)
+                            .setFeatureFlag("replace.participant",true)
+                            .setFeatureFlag("toolbox.alwaysVisible",true)
+
 
                             .build();
                     mJitsiMeetViewReference.getJitsiMeetView().join(options);
@@ -119,14 +127,17 @@ public class RNJitsiMeetModule extends ReactContextBaseJavaModule {
         UiThreadUtil.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if (mJitsiMeetViewReference.getJitsiMeetView() != null) {
-                    mJitsiMeetViewReference.getJitsiMeetView().leave();
-                }
+                hangUp();
             }
         });
     }
 
-    @Nullable
+    public void hangUp() {
+        Intent hangupBroadcastIntent = BroadcastIntentHelper.buildHangUpIntent();
+        LocalBroadcastManager.getInstance(Objects.requireNonNull(getCurrentActivity())).sendBroadcast(hangupBroadcastIntent);
+    }
+
+ /*   @Nullable
     @Override
     public Map<String, Object> getConstants() {
         final Map<String, Object> constants = new HashMap<>();
@@ -134,8 +145,9 @@ public class RNJitsiMeetModule extends ReactContextBaseJavaModule {
         constants.put(Constants.CONST_JS_CONFERENCE_TERMINATED_EVENT_NAME, Constants.JS_CONFERENCE_TERMINATED_EVENT_NAME);
         constants.put(Constants.CONST_JS_CONFERENCE_WILL_JOIN_EVENT_NAME, Constants.JS_CONFERENCE_WILL_JOIN_EVENT_NAME);
         constants.put(Constants.CONST_JS_PARTICIPANT_LEFT_EVENT_NAME, Constants.JS_PARTICIPANT_LEFT_EVENT_NAME);
+        constants.put(Constants.CONST_JS_RETRIEVE_PARTICIPANT_INFO_EVENT_NAME, Constants.JS_RETRIEVE_PARTICIPANTS_INFO_EVENT_NAME);
         return constants;
-    }
+    }*/
 
 
 }

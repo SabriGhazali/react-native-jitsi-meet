@@ -16,6 +16,7 @@ public class RNJitsiMeetPackage implements ReactPackage, IRNJitsiMeetViewReferen
 
     private RNJitsiMeetView mJitsiMeetView = null;
 
+    private ReactApplicationContext reactContext = null;
 
     public void setJitsiMeetView(RNJitsiMeetView jitsiMeetView) {
         mJitsiMeetView = jitsiMeetView;

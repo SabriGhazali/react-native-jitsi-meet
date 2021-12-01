@@ -3,6 +3,7 @@ package com.reactnativejitsimeet;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.inputmethod.InputMethodManager;
 
 import androidx.annotation.NonNull;
@@ -22,9 +23,10 @@ import java.lang.reflect.Method;
 import java.util.Iterator;
 import java.util.Map;
 
-public class RNJitsiMeetView extends BaseReactView<JitsiMeetViewListener> implements RNOngoingConferenceTracker.OngoingConferenceListener {
+public class RNJitsiMeetView extends BaseReactView<JitsiMeetViewListener>  {
 
     private volatile String url;
+    private static final String TAG = "RNJitsiMeetViewManager";
 
 
     private static Bundle mergeProps(@Nullable Bundle a, @Nullable Bundle b) {
@@ -66,13 +68,13 @@ public class RNJitsiMeetView extends BaseReactView<JitsiMeetViewListener> implem
 
     public RNJitsiMeetView(@NonNull Context context) {
         super(context);
-        RNOngoingConferenceTracker.getInstance().addListener(this);
+       // RNOngoingConferenceTracker.getInstance().addListener(this);
     }
 
 
 
     public void dispose() {
-        RNOngoingConferenceTracker.getInstance().removeListener(this);
+       // RNOngoingConferenceTracker.getInstance().removeListener(this);
         super.dispose();
     }
 
@@ -86,8 +88,7 @@ public class RNJitsiMeetView extends BaseReactView<JitsiMeetViewListener> implem
     }
 
     public void leave() {
-        this.setProps(new Bundle());
-        this.leave();
+        setProps(new Bundle());
     }
 
     private void setProps(@NonNull Bundle newProps) {
@@ -121,5 +122,8 @@ public class RNJitsiMeetView extends BaseReactView<JitsiMeetViewListener> implem
     protected void onDetachedFromWindow() {
         this.dispose();
         super.onDetachedFromWindow();
+        Log.d(TAG, "onDetachedFromWindow: ");
     }
+
+
 }
